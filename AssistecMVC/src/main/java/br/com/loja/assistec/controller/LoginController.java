@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import br.com.loja.assistec.model.LoginDAO;
 import br.com.loja.assistec.model.Usuario;
 import br.com.loja.assistec.view.LoginView;
+import br.com.loja.assistec.view.MensagemView;
 
 public class LoginController {
 	private LoginDAO dao;
@@ -56,36 +57,30 @@ public class LoginController {
 	}
 
 	public void processarLogin() {
-	    String login = view.getLogin();
-	    String senha = view.getSenha();
-	    try {
-	        if (!dao.bancoOnline()) {
-	            view.mostrarMensagem("Banco de dados desconectado!", "Erro");
-	        } else if (login != null && !login.isEmpty() && senha != null && !senha.isEmpty()) {
-	            listaDadosView = autenticar(login, senha);
-	            if (listaDadosView != null) {
-	                String nome = listaDadosView.get(0);
-	                String perfil = listaDadosView.get(1);
-	                
-	                // Exibe a mensagem de boas-vindas
-	                view.mostrarMensagem("Bem-vindo " + nome + ". Acesso liberado!", "Informação");
-	                
-	                // Fecha a tela de login e abre a tela principal
-	                view.dispose();
-	                
-	                // Cria o controlador da tela principal
-	                new PrincipalController(nome, perfil);
-	            } else {
-	                view.mostrarMensagem("Usuário ou senha inválidos!", "Atenção");
-	            }
-	        } else {
-	            view.mostrarMensagem("Verifique as informações!", "Atenção");
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+		String login = view.getLogin();
+		String senha = view.getSenha();
+		try {
+			if (!dao.bancoOnline()) {
+				//view.mostrarMensagem("Banco de dados desconectado!", "Erro");
+				new MensagemView("Banco de dados desconectado!", 0);
+			} else if (login != null && !login.isEmpty() && senha != null && !senha.isEmpty()) {
+				listaDadosView = autenticar(login, senha);
+				if (listaDadosView != null) {
+					//view.mostrarMensagem("Bem vindo " + listaDadosView.get(0) + " acesso liberado!", "Informação");
+					new MensagemView("Bem vindo " + listaDadosView.get(0) + " acesso liberado!", 1);
+					view.dispose();
+				} else {
+					//view.mostrarMensagem("Usuário ou senha inválidos!", "Atenção");
+					new MensagemView("Usuário ou senha inválidos!", 3);
+				}
+			} else {
+				//view.mostrarMensagem("Verifique as informações!", "Atenção");
+				new MensagemView("Olha o sobre!", 10);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
-	
 
 	public ArrayList<String> autenticar(String login, String senha) throws SQLException {
 		Usuario user = dao.autenticar(login, senha);

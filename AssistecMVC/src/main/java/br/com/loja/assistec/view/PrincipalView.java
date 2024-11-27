@@ -1,116 +1,145 @@
 package br.com.loja.assistec.view;
 
-	import java.awt.EventQueue;
-	import java.awt.event.ActionEvent;
-	import java.awt.event.ActionListener;
-	import java.sql.SQLException;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-	import javax.swing.GroupLayout;
-	import javax.swing.GroupLayout.Alignment;
-	import javax.swing.JFrame;
-	import javax.swing.JLabel;
-	import javax.swing.JMenu;
-	import javax.swing.JMenuBar;
-	import javax.swing.JMenuItem;
-	import javax.swing.JOptionPane;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
 
-	public class PrincipalView extends JFrame {
+import java.awt.Font;
 
-		private JMenuItem menuSair;
-		private JMenuItem menuSobre;
-		private JMenuItem menuUsuarios;
-		
+public class PrincipalView extends javax.swing.JFrame {
+	private static final long serialVersionUID = 1L;
+	private JMenu menuRelatorio;
+	private JMenu menuCadastro;
+	private JLabel lblUsuario;
+	private JMenuBar menuBar;
+	private JMenu menuArquivo;
+	private JMenuItem menuSair;
+	private JMenu menuAjuda;
+	private JMenuItem menuSobre;
+	private JMenuItem menuUsuarios;
+	private JPanel panel;
 
-		public PrincipalView(String user, String perfil) {
-			setTitle("Sistema de Gestão ASSISTEC");
-			setBounds(100, 100, 450, 300);
-			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			
-			JLabel lblUsuario = new JLabel("");
-			GroupLayout groupLayout = new GroupLayout(getContentPane());
-			groupLayout.setHorizontalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-					.addGroup(groupLayout.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(lblUsuario)
-						.addContainerGap(378, Short.MAX_VALUE))
-			);
-			groupLayout.setVerticalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-					.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-						.addContainerGap(214, Short.MAX_VALUE)
-						.addComponent(lblUsuario)
-						.addContainerGap())
-			);
-			getContentPane().setLayout(groupLayout);
-			
-			JMenuBar menuBar = new JMenuBar();
-			setJMenuBar(menuBar);
-			
-			JMenu menuArquivo = new JMenu("Arquivo");
-			menuBar.add(menuArquivo);
-			
-			menuSair = new JMenuItem("Sair");
-			menuSair.setActionCommand("MenuSairAction");
+	public PrincipalView() {
+		// Definindo os textos dos botões
+        UIManager.put("OptionPane.yesButtonText", "Sim");
+        UIManager.put("OptionPane.noButtonText", "Não");
 
-			
-			menuArquivo.add(menuSair);
-			
-			JMenu menuCadastro = new JMenu("Cadastro");
-			menuCadastro.setEnabled(false);
-			menuBar.add(menuCadastro);
-			
-			menuUsuarios = new JMenuItem("Usuários");
-			menuUsuarios.setActionCommand("MenuUsuariosAction");
-			
-			
-			
-			menuCadastro.add(menuUsuarios);
-			
-			JMenu menuRelatorio = new JMenu("Relatórios");
-			menuRelatorio.setEnabled(false);
-			menuBar.add(menuRelatorio);
-			
-			JMenu menuAjuda = new JMenu("Ajuda");
-			menuBar.add(menuAjuda);
-			
-			menuSobre = new JMenuItem("Sobre");
-			menuSobre.setActionCommand("MenuSobreAction");
-			
-			menuAjuda.add(menuSobre);
-			
-			lblUsuario.setText(user);
-			
-			if("Admin".equalsIgnoreCase(perfil)) {
-				menuCadastro.setEnabled(true);
+		inicializarComponentes();
+		configurarJanela();
+		configurarLayout();
+	}
+
+	// Inicializa e configura os componentes da interface
+	private void inicializarComponentes() {
+		// Configurando barra de menu
+		menuBar = new JMenuBar();
+
+		// Menu "Arquivo"
+		menuArquivo = new JMenu("Arquivo");
+		menuSair = new JMenuItem("Sair");
+		menuSair.setActionCommand("MenuSairAction");
+		menuArquivo.add(menuSair);
+		menuBar.add(menuArquivo);
+
+		// Menu "Cadastro"
+		menuCadastro = new JMenu("Cadastro");
+		menuCadastro.setEnabled(false); // Desabilitado para usuários não administradores
+		menuUsuarios = new JMenuItem("Usuários");
+		menuUsuarios.setActionCommand("MenuUsuariosAction");
+		menuCadastro.add(menuUsuarios);
+		menuBar.add(menuCadastro);
+
+		// Menu "Relatórios"
+		menuRelatorio = new JMenu("Relatórios");
+		menuRelatorio.setEnabled(false); // Desabilitado para usuários não administradores
+		menuBar.add(menuRelatorio);
+
+		// Menu "Ajuda"
+		menuAjuda = new JMenu("Ajuda");
+		menuSobre = new JMenuItem("Sobre");
+		menuSobre.setActionCommand("MenuSobreAction");
+		menuAjuda.add(menuSobre);
+		menuBar.add(menuAjuda);
+
+		setJMenuBar(menuBar);
+
+		// Painel para exibir o nome do usuário
+		panel = new JPanel();
+		lblUsuario = new JLabel();
+		lblUsuario.setFont(new Font("Verdana", Font.PLAIN, 14)); // Estilo de fonte
+		lblUsuario.setText("Usuário");
+		panel.add(lblUsuario);
+	}
+
+	// Configura as propriedades da janela
+	private void configurarJanela() {
+		setTitle("Sistema de Gestão - Tela Principal");
+		setBounds(100, 100, 600, 400);
+	}
+
+	// Configura o layout da janela
+	private void configurarLayout() {
+//		JPanel panel = new JPanel();
+		GroupLayout layout = new GroupLayout(getContentPane());
+		layout.setHorizontalGroup(
+			layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		layout.setVerticalGroup(
+			layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(layout.createSequentialGroup()
+					.addContainerGap(332, Short.MAX_VALUE)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
+		getContentPane().setLayout(layout);
+	}
+
+	// Adiciona listeners aos itens de menu
+	public void addPrincipalViewListener(ActionListener listener) {
+		menuUsuarios.addActionListener(listener);
+		menuSair.addActionListener(listener);
+		menuSobre.addActionListener(listener);
+	}
+
+	// Exibe uma confirmação para fechar o sistema
+	public int confirmarFecharSistema() {
+		return JOptionPane.showConfirmDialog(this, "Tem certeza que deseja sair?", "Atenção",
+				JOptionPane.YES_NO_OPTION);
+	}
+
+	// Exibe informações sobre o sistema
+	public void mostrarSobre() {
+		JOptionPane.showMessageDialog(this, "Sistema de Gestão Assistec - Versão 1.0");
+	}
+
+	// Personaliza a interface conforme o perfil do usuário
+	public void configurarPerfilUsuario(String login, ArrayList<String> permissoes) {
+		lblUsuario.setText(login);
+		for (String permissao : permissoes) {
+			switch (permissao) {
+			case "MenuRelatorio":
 				menuRelatorio.setEnabled(true);
+				break;
+			case "MenuCadastro":
+				menuCadastro.setEnabled(true);
+				break;
+			default:
+				break;
 			}
-
 		}
-		
-
-		public void addPrincListener(ActionListener listener) {
-	        menuSair.addActionListener(listener);
-	        menuSobre.addActionListener(listener);
-	        menuUsuarios.addActionListener(listener);
-	    }
-		
-		public void mostrarMensagem(String mensagem, String tipo) {
-			int messageType = switch (tipo) {
-			case "Atenção" -> JOptionPane.WARNING_MESSAGE;
-			case "Informação" -> JOptionPane.INFORMATION_MESSAGE;
-			case "Erro" -> JOptionPane.ERROR_MESSAGE;
-			default -> JOptionPane.PLAIN_MESSAGE;
-			};
-			JOptionPane.showMessageDialog(this, mensagem, tipo, messageType);
-		}
-		
-		public int SairSistema() {
-			int Sair = JOptionPane.showConfirmDialog(null, // tem que terum metodo pra sim e pra nao e tem que retornar inteiro
-	                "Tem certeza que deseja sair?",
-	                "Atenção", JOptionPane.YES_NO_OPTION);
-			return Sair;
-		}
-
+	}
 
 }
