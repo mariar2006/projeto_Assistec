@@ -1,138 +1,128 @@
 package br.com.loja.assistec.view;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
-import br.com.loja.assistec.controller.UsuarioController;
+import br.com.loja.assistec.model.Usuario;
 
 public class CadastrarUsuariosView extends JFrame {
+    private static final long serialVersionUID = 1L;
+    private JButton btnFechar;
+    private JButton btnIncluir;
+    private JButton btnExcluir;
+    private JTextField txtNome;
+    private JTextField txtFone;
+    private JTextField txtLogin;
+    private JPasswordField txtSenha;
+    private JComboBox<String> cbPerfil;
 
-	private static final long serialVersionUID = 1L;
-	private JTextField txtNome;
-	private JTextField txtFone;
-	private JTextField txtLogin;
-	private JLabel lblNewLabel_1;
-	private JPasswordField txtSenha;
-	public JComboBox<String> cbPerfil;
+    public CadastrarUsuariosView(Usuario usuarioSelecionado) {
+    	// Definindo os textos dos botões
+        setTitle("Cadastro de Usuários");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setBounds(100, 100, 450, 300);
+        setLocationRelativeTo(null);
+        initComponents();
+    }
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CadastrarUsuariosView frame = new CadastrarUsuariosView();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    private void initComponents() {
+        JPanel contentPane = new JPanel(new BorderLayout());
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
 
-	/**
-	 * Create the frame.
-	 */
-	public CadastrarUsuariosView() {
-		setBounds(100, 100, 450, 300);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		JPanel painelSuperior = new JPanel();
-		getContentPane().add(painelSuperior, BorderLayout.NORTH);
-		
-		JLabel lblNewLabel = new JLabel("Cadastro de usuários");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
-		painelSuperior.add(lblNewLabel);
-		
-		JPanel painelInferior = new JPanel();
-		getContentPane().add(painelInferior, BorderLayout.SOUTH);
-		
-		JButton btnIncluir = new JButton("Incluir");
-		btnIncluir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				if (!"".equalsIgnoreCase(txtLogin.getText())
-						&& !"".equalsIgnoreCase(new String(txtSenha.getPassword()))) {
-					UsuarioController uc = new UsuarioController();
-					try {
-						String perfil = (String) cbPerfil.getSelectedItem();
-						uc.salvar(txtNome.getText(), txtFone.getText(), txtLogin.getText(),
-								new String(txtSenha.getPassword()), perfil);
-						JOptionPane.showMessageDialog(null, "Contato salvo com sucesso!", "Mensagem",
-								JOptionPane.INFORMATION_MESSAGE);
-						// Recria o arraylist de usuarios após salvar
-//						ArrayList<Usuario> novosUsuarios = uc.listarUsuarios();
-						// Pede para a Tabela ser atualizada
-//						listarUsuariosView.atualizarTabela(novosUsuarios);
-//						limparCampos();
-					} catch (SQLException e1) {
-						JOptionPane.showMessageDialog(null, "Nao foi possivel salvar contato!n" + e1.getMessage());
+        JLabel lblTitulo = new JLabel("Cadastro de Usuários", JLabel.CENTER);
+        lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 14));
+        contentPane.add(lblTitulo, BorderLayout.NORTH);
 
-					}
-				} else {
-					JOptionPane.showMessageDialog(null, "Confira os campos Login e Senha");
-				}
-				
-			}
-		});
-		painelInferior.add(btnIncluir);
-		
-		JButton btnExcluir = new JButton("Excluir");
-		painelInferior.add(btnExcluir);
-		
-		JButton btnFechar = new JButton("Fechar");
-		painelInferior.add(btnFechar);
-		
-		JPanel painelCentral = new JPanel();
-		getContentPane().add(painelCentral, BorderLayout.CENTER);
-		painelCentral.setLayout(new GridLayout(6, 2, 0, 0));
-		
-		lblNewLabel_1 = new JLabel("Nome");
-		painelCentral.add(lblNewLabel_1);
-		
-		txtNome = new JTextField();
-		painelCentral.add(txtNome);
-		txtNome.setColumns(10);
-		
-		JLabel lblNewLabel_5 = new JLabel("Fone");
-		painelCentral.add(lblNewLabel_5);
-		
-		txtFone = new JTextField();
-		painelCentral.add(txtFone);
-		txtFone.setColumns(10);
-		
-		JLabel lblNewLabel_4 = new JLabel("Login");
-		painelCentral.add(lblNewLabel_4);
-		
-		txtLogin = new JTextField();
-		painelCentral.add(txtLogin);
-		txtLogin.setColumns(10);
-		
-		JLabel lblNewLabel_3 = new JLabel("Senha");
-		painelCentral.add(lblNewLabel_3);
-		
-		txtSenha = new JPasswordField();
-		painelCentral.add(txtSenha);
-		
-		JLabel lblNewLabel_2 = new JLabel("Perfil");
-		painelCentral.add(lblNewLabel_2);
-		
-		cbPerfil = new JComboBox<>(new String[] { "User", "Admin" });
-		
-		painelCentral.add(cbPerfil);
+        JPanel panelCampos = new JPanel(new GridLayout(6, 2));
+        txtNome = new JTextField(20);
+        txtFone = new JTextField(20);
+        txtLogin = new JTextField(20);
+        txtSenha = new JPasswordField(20);
+        cbPerfil = new JComboBox<>(new String[]{"User", "Admin"});
 
-	}
+        panelCampos.add(new JLabel("Nome:"));
+        panelCampos.add(txtNome);
+        panelCampos.add(new JLabel("Fone:"));
+        panelCampos.add(txtFone);
+        panelCampos.add(new JLabel("Login:"));
+        panelCampos.add(txtLogin);
+        panelCampos.add(new JLabel("Senha:"));
+        panelCampos.add(txtSenha);
+        panelCampos.add(new JLabel("Perfil:"));
+        panelCampos.add(cbPerfil);
+        contentPane.add(panelCampos, BorderLayout.CENTER);
+
+        JPanel panelBotoes = new JPanel();
+        btnIncluir = new JButton("Incluir");
+        btnIncluir.setActionCommand("BotaoIncluirAction");
+        btnExcluir = new JButton("Excluir");
+        btnExcluir.setActionCommand("BotaoExcluirAction");
+        btnExcluir.setVisible(false);
+        btnFechar = new JButton("Fechar");
+        btnFechar.setActionCommand("BotaoFecharAction");
+
+        panelBotoes.add(btnIncluir);
+        panelBotoes.add(btnExcluir);
+        panelBotoes.add(btnFechar);
+        contentPane.add(panelBotoes, BorderLayout.SOUTH);
+        pack();
+    }
+
+    public void addCadastrarUsuariosListener(ActionListener listener) {
+    	btnIncluir.addActionListener(listener);
+    	btnExcluir.addActionListener(listener);
+    	btnFechar.addActionListener(listener);
+    }
+
+    public void preencherCampos(Usuario usuarioSelecionado) {
+        txtNome.setText(usuarioSelecionado.getNome());
+        txtFone.setText(usuarioSelecionado.getFone());
+        txtLogin.setText(usuarioSelecionado.getLogin());
+        txtSenha.setText(usuarioSelecionado.getSenha());
+        cbPerfil.setSelectedItem(usuarioSelecionado.getPerfil());
+    }
+
+    public void limparCampos() {
+        txtNome.setText("");
+        txtFone.setText("");
+        txtLogin.setText("");
+        txtSenha.setText("");
+        cbPerfil.setSelectedItem("User");
+    }
+
+   
+    public String getLogin() {
+        return txtLogin.getText();
+    }
+
+    public String getSenha() {
+        return new String(txtSenha.getPassword());
+    }
+
+    public String getNome() {
+        return txtNome.getText();
+    }
+
+    public String getFone() {
+        return txtFone.getText();
+    }
+
+
+
 
 }
+
+
+
