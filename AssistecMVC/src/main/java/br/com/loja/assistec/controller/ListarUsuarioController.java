@@ -53,7 +53,9 @@ public class ListarUsuarioController {
 		public void mouseClicked(MouseEvent e) {
 			if (e.getButton() == MouseEvent.BUTTON1) {
 				//Selecionar o usuario
-				System.out.println("clicado no botao esquerdo do mouse");
+				int linha= listarView.getLinhaSelecionado();
+				Long iduser = (Long) listarView.getValorLinhaColuna(Linha, 0);
+				Usuario usuarioSelecionado = buscarUsuarioPorID(iduser);
 			}
 		}
 	}
