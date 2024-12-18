@@ -47,15 +47,26 @@ public class ListarUsuarioController {
 		return dao.selecionarUsuarios();
 	}
 	
+	private Usuario buscarUsuarioPorID(Long iduser) throws SQLException {
+		UsuarioDAO dao = new UsuarioDAO();
+		return dao.selecionarUsuario(iduser);
+	}
+	
 	//Classe que trata o evento do clique na tabela
 	private class TabelaMouseClickListener extends MouseAdapter{
 		
 		public void mouseClicked(MouseEvent e) {
 			if (e.getButton() == MouseEvent.BUTTON1) {
 				//Selecionar o usuario
-				int linha= listarView.getLinhaSelecionado();
-				Long iduser = (Long) listarView.getValorLinhaColuna(Linha, 0);
-				Usuario usuarioSelecionado = buscarUsuarioPorID(iduser);
+				int linha = listarView.getLinhaSelecionada();
+				Long iduser = (Long) listarView.getValorLinhaColuna(linha, 0);
+				try {
+					Usuario usuarioSelecionado = buscarUsuarioPorID(iduser);
+					abrirCadastroUsuario(usuarioSelecionado);
+				} catch (SQLException e1) {
+					new MensagemView("Erro ao buscar usuário!",0);
+				}
+				
 			}
 		}
 	}
@@ -91,5 +102,9 @@ public class ListarUsuarioController {
 				e1.printStackTrace();
 			}
 		}
+	}
+
+	public void atualizarTabela(ArrayList<Usuario> novosUsuarios) {
+		listarView.atualizarTabelaUsuarios(novosUsuarios);
 	}
 }

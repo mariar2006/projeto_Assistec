@@ -76,6 +76,19 @@ public class ListarUsuariosView extends JFrame {
 		tabela.addMouseListener(listener);
 	}
 	
+	//Retorna a linha selecionada no JTable
+	public int getLinhaSelecionada() {
+		return tabela.getSelectedRow();
+	}
+	
+	public Object getValorLinhaColuna(int linha, int coluna) {
+		return tabela.getValueAt(linha, coluna);
+	}
+
+	public void atualizarTabelaUsuarios(ArrayList<Usuario> novosUsuarios) {
+		usuarioTableModel.carregarDados(novosUsuarios);
+		
+	}
 	
 	
 	
